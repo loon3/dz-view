@@ -13,38 +13,42 @@ if (document.location.hostname == "chain.so") {
                 console.log(data_chunk);
                 
                 var allparts = findParts(data_chunk);
-
                 console.log(allparts);
-                
-                var location = getCoord(dz_addr);
-                var map_url = "https://www.google.com/maps/@" + location['lat'] + "," + location['long'] + ",10z";   
-                var location_copy = "<div style='text-align: center; padding-top: 20px;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Location</span><br>"+location['rad']+" meter radius from<br><a href='"+map_url+"'>"+location['lat']+", "+location['long']+"</a></div>";
-                
-                if(dz_addr.substr(0,3) != "1DZ"){location_copy = "";};
-
+            
                 var tx_type = hex2bin(allparts['prefix']);
-                if(tx_type == "DZITCRTE"){tx_type = "New Item Listing <div style='font-size: 14px'>(DZITCRTE)</div>";}
-                var tx_type_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Tx Type</span><br>"+tx_type;
                 
-                var description = allparts['d'];               
-                var description_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Description</span><br>"+hex2bin(description.substr(4));
-                
-                var currency = allparts['c'];               
-                var currency_copy = hex2bin(currency.substr(4));
-                         
-                var price_hex = allparts['p'].substr(2); 
-                var price_clean = getVarintArray(price_hex);
-                var price_dec = parseInt(price_clean, 16);
-                
-                if (hex2bin(currency.substr(4)) == "BTC") {price_dec = price_dec / 100000000;}
-                
-                if (isNaN(price_dec)) {price_dec = "n/a";} 
-                var price_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span>";
-                
-                
-                var manifest = chrome.runtime.getManifest();
+                if(tx_type == "DZITCRTE"){
+                    
+                    var location = getCoord(dz_addr);
+                    var map_url = "https://www.google.com/maps/@" + location['lat'] + "," + location['long'] + ",10z";   
+                    var location_copy = "<div style='text-align: center; padding-top: 20px;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Location</span><br>"+location['rad']+" meter radius from<br><a href='"+map_url+"'>"+location['lat']+", "+location['long']+"</a></div>";
 
-                $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROPZONE</div>"+"<div align='center' style='padding-top: 20px'>"+tx_type_copy+"</div>"+location_copy+"<div align='center' style='padding: 20px 0 10px 0;'>"+price_copy+" "+currency_copy+"</div><div style='width: 400px; margin: auto;'><span style='font-size: 16px;'>"+description_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                    if(dz_addr.substr(0,3) != "1DZ"){location_copy = "";}
+
+                    var tx_type_copy = "New Item Listing <div style='font-size: 14px'>(DZITCRTE)</div>";
+                    tx_type_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Tx Type</span><br>"+tx_type_copy;
+
+                    var description = allparts['d'];               
+                    var description_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Description</span><br>"+hex2bin(description.substr(4));
+
+                    var currency = allparts['c'];               
+                    var currency_copy = hex2bin(currency.substr(4));
+
+                    var price_hex = allparts['p'].substr(2); 
+                    var price_clean = getVarintArray(price_hex);
+                    var price_dec = parseInt(price_clean, 16);
+
+                    if (hex2bin(currency.substr(4)) == "BTC") {price_dec = price_dec / 100000000;}
+
+                    if (isNaN(price_dec)) {price_dec = "n/a";} 
+                    var price_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span>";
+
+
+                    var manifest = chrome.runtime.getManifest();
+
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROPZONE</div>"+"<div align='center' style='padding-top: 20px'>"+tx_type_copy+"</div>"+location_copy+"<div align='center' style='padding: 20px 0 10px 0;'>"+price_copy+" "+currency_copy+"</div><div style='width: 400px; margin: auto;'><span style='font-size: 16px;'>"+description_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+
+                }
                 
             }); 
             
