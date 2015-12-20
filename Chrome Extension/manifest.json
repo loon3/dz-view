@@ -1,0 +1,18 @@
+{
+   "author": "Joe Looney",
+   "description": "Parse Drop Zone txs",
+   "icons": {
+      "128": "icon-128.png",
+      "48": "icon-48.png"
+   },
+   "content_scripts": [
+    {
+      "matches": ["https://chain.so/*"],
+      "js": ["js/jquery.min.js", "js/find-dz-data.js"]
+    }
+   ],
+   "manifest_version": 2,
+   "name": "dz-view",
+   "short_name": "dz-view",
+   "version": "0.1.0"
+}
