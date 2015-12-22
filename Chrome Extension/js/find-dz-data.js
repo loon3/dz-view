@@ -63,13 +63,12 @@ if (document.location.hostname == "chain.so") {
                     var exp_hex = allparts['e'].substr(2); 
                     var exp_clean = getVarintArray(exp_hex);
                     var exp_dec = parseInt(exp_clean, 16);
-                    
-                    
+
                     
                     console.log("Price: "+price_dec+" satoshis");
                     console.log("Expires in "+exp_dec+" blocks");
                     
-                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>New Item Invoice <div style='font-size: 14px'>(DZINCRTE)</div></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span> BTC</div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-size: 16px;'>Expires after "+exp_dec+" blocks</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>New Item Invoice <div style='font-size: 14px'>(DZINCRTE)</div></div><div style='width: 400px; margin: auto; text-align: center; padding-top: 30px; font-weight: bold;'><span style='font-size: 16px;'>Expires after "+exp_dec+" blocks</span></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span> BTC</div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Buyer's Address</span><br><span style='font-size: 16px;'>"+dz_addr+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
                         
                 } else if(tx_type == "DZBYUPDT"){
                     
