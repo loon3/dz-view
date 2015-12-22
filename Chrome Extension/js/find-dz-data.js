@@ -1,6 +1,15 @@
 
 
 if (document.location.hostname == "chain.so") {
+    
+    var manifest = chrome.runtime.getManifest();
+    
+//testing!
+//    get_dz_encoded("", function(utxo_hash, data_chunk, dz_addr){
+//    
+//        console.log(data_chunk);
+//    
+//    });
 
     $('kbd').each(function(i, obj) {
         
@@ -43,11 +52,56 @@ if (document.location.hostname == "chain.so") {
                     if (isNaN(price_dec)) {price_dec = "n/a";} 
                     var price_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span>";
 
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>"+tx_type_copy+"</div>"+location_copy+"<div align='center' style='padding: 20px 0 10px 0;'>"+price_copy+" "+currency_copy+"</div><div style='width: 400px; margin: auto;'><span style='font-size: 16px;'>"+description_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
 
-                    var manifest = chrome.runtime.getManifest();
-
-                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROPZONE</div>"+"<div align='center' style='padding-top: 20px'>"+tx_type_copy+"</div>"+location_copy+"<div align='center' style='padding: 20px 0 10px 0;'>"+price_copy+" "+currency_copy+"</div><div style='width: 400px; margin: auto;'><span style='font-size: 16px;'>"+description_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
-
+                } else if(tx_type == "DZINCRTE"){
+                    
+                    var price_hex = allparts['p'].substr(2); 
+                    var price_clean = getVarintArray(price_hex);
+                    var price_dec = parseInt(price_clean, 16) / 100000000;
+                    
+                    var exp_hex = allparts['e'].substr(2); 
+                    var exp_clean = getVarintArray(exp_hex);
+                    var exp_dec = parseInt(exp_clean, 16);
+                    
+                    
+                    
+                    console.log("Price: "+price_dec+" satoshis");
+                    console.log("Expires in "+exp_dec+" blocks");
+                    
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>New Item Invoice <div style='font-size: 14px'>(DZINCRTE)</div></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span> BTC</div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-size: 16px;'>Expires after "+exp_dec+" blocks</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                        
+                } else if(tx_type == "DZBYUPDT"){
+                    
+                    var desc = allparts['d'];               
+                    var desc_copy = hex2bin(desc.substr(4));
+                    
+                    var alias = allparts['a'];               
+                    var alias_copy = hex2bin(alias.substr(4));
+                    
+                    console.log("Description: "+desc_copy);
+                    console.log("Alias: "+alias_copy);
+                    
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>Buyer Profile Update <div style='font-size: 14px'>(DZBYUPDT)</div></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Alias</span><br><span style='font-size: 32px;'>"+alias_copy+"</span></div><div align='center' style='padding: 0px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Address</span><br><span style='font-size: 16px;'>"+dz_addr+"</span></div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Description</span><br><span style='font-size: 16px;'>"+desc_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                        
+                } else if(tx_type == "DZINPAID"){
+                    
+                    var desc = allparts['d'];               
+                    var desc_copy = hex2bin(desc.substr(4));
+                    
+                    var txid = allparts['t'];               
+                    var txid_copy = hex2bin(txid.substr(4));
+                    
+                    var comm_hex = allparts['c'].substr(2); 
+                    var comm_clean = getVarintArray(comm_hex);
+                    var comm_dec = parseInt(comm_clean, 16);
+                    
+                    console.log("Review: "+desc_copy);
+                    console.log("Transaction ID: "+txid_copy);
+                    console.log("Seller Communication Quality (0 to 8): "+comm_dec);
+                    
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>Buyer Invoice Review <div style='font-size: 14px'>(DZINPAID)</div></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Seller Communication Quality (0 to 8)</span><br><span style='font-size: 32px;'>"+comm_dec+"</span></div><div align='center' style='padding: 0px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Transaction ID</span><br><span style='font-size: 12px;'><a href='https://chain.so/tx/BTC/"+txid_copy+"'>"+txid_copy+"</a></span></div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Review</span><br><span style='font-size: 16px;'>"+desc_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                        
                 }
                 
             }); 
@@ -255,6 +309,84 @@ function findParts(data_chunk) {
     
         return allparts;
         
+    } else if(tx_type == "DZINCRTE") {
+                
+        for(var i = 0; i < parts.length; i++){
+
+            if(parts[i-1] == "01"){
+                if(parts[i] == "70"){
+                    k = "p";    
+                }
+                if(parts[i] == "65"){
+                    k = "e";    
+                }
+            }
+
+            if(parts[i] != "01"){
+                if (allparts[k] !== undefined) {
+                    allparts[k] += parts[i];
+                }else{
+                    allparts[k] = parts[i];
+                }
+            }
+
+        }
+    
+        return allparts;
+        
+    } else if(tx_type == "DZBYUPDT") {
+                  
+        for(var i = 0; i < parts.length; i++){
+
+            if(parts[i-1] == "01"){
+                if(parts[i] == "64"){
+                    k = "d";    
+                }
+                if(parts[i] == "61"){
+                    k = "a";    
+                }
+            }
+
+            if(parts[i] != "01"){
+                if (allparts[k] !== undefined) {
+                    allparts[k] += parts[i];
+                }else{
+                    allparts[k] = parts[i];
+                }
+            }
+
+        }
+    
+        return allparts;
+        
+    } else if(tx_type == "DZINPAID") {
+                  
+        for(var i = 0; i < parts.length; i++){
+
+            if(parts[i-1] == "01"){
+                if(parts[i] == "64"){
+                    k = "d";    
+                }
+                if(parts[i] == "74"){
+                    k = "t";    
+                }
+                if(parts[i] == "63"){
+                    k = "c";    
+                }
+            }
+
+            if(parts[i] != "01"){
+                if (allparts[k] !== undefined) {
+                    allparts[k] += parts[i];
+                }else{
+                    allparts[k] = parts[i];
+                }
+            }
+
+        }
+    
+        return allparts;
+        
     }
     
 }
@@ -263,7 +395,7 @@ function getCoord(addr){
     
     var lat = (parseInt(addr.substr(3,9).replace(/X/g, "0"), 10) - 90000000) / 1000000;
     var long = (parseInt(addr.substr(12,9).replace(/X/g, "0"), 10) - 180000000) / 1000000;
-    var rad = parseInt(addr.substr(21,8).replace(/X/g, "0"), 10);
+    var rad = parseInt(addr.substr(21,6).replace(/X/g, "0"), 10);
     
     var location = {lat: lat, long: long, rad: rad};
     
