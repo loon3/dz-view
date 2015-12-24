@@ -1,4 +1,14 @@
-
+//if (document.location.hostname == "blockchain.info") {
+//    
+//    var manifest = chrome.runtime.getManifest();
+//    
+//    var txid = $(".hash-link").text();
+//    
+//    console.log(txid);
+//    
+//    $().insertBefore( ".txdiv:first" );
+//                             
+//}
 
 if (document.location.hostname == "chain.so") {
     
@@ -296,15 +306,25 @@ function findParts(data_chunk) {
                 }
             }
 
-            if(parts[i] != "01"){
+            //if(parts[i] != "01"){
                 if (allparts[k] !== undefined) {
                     allparts[k] += parts[i];
                 }else{
                     allparts[k] = parts[i];
                 }
-            }
+            //}
 
         }
+        
+        $.each(allparts, function(key, value) {
+            if (value.slice(-2) == "01") {
+                
+                var newlen = value.length - 2;
+                
+                allparts[key] = value.substr(0, newlen);
+                
+            }
+        }); 
     
         return allparts;
         
@@ -321,15 +341,25 @@ function findParts(data_chunk) {
                 }
             }
 
-            if(parts[i] != "01"){
+             //if(parts[i] != "01"){
                 if (allparts[k] !== undefined) {
                     allparts[k] += parts[i];
                 }else{
                     allparts[k] = parts[i];
                 }
-            }
+            //}
 
         }
+        
+        $.each(allparts, function(key, value) {
+            if (value.slice(-2) == "01") {
+                
+                var newlen = value.length - 2;
+                
+                allparts[key] = value.substr(0, newlen);
+                
+            }
+        }); 
     
         return allparts;
         
@@ -346,15 +376,25 @@ function findParts(data_chunk) {
                 }
             }
 
-            if(parts[i] != "01"){
+             //if(parts[i] != "01"){
                 if (allparts[k] !== undefined) {
                     allparts[k] += parts[i];
                 }else{
                     allparts[k] = parts[i];
                 }
-            }
+            //}
 
         }
+        
+        $.each(allparts, function(key, value) {
+            if (value.slice(-2) == "01") {
+                
+                var newlen = value.length - 2;
+                
+                allparts[key] = value.substr(0, newlen);
+                
+            }
+        }); 
     
         return allparts;
         
@@ -374,16 +414,26 @@ function findParts(data_chunk) {
                 }
             }
 
-            if(parts[i] != "01"){
+              //if(parts[i] != "01"){
                 if (allparts[k] !== undefined) {
                     allparts[k] += parts[i];
                 }else{
                     allparts[k] = parts[i];
                 }
-            }
+            //}
 
         }
-    
+        
+        $.each(allparts, function(key, value) {
+            if (value.slice(-2) == "01") {
+                
+                var newlen = value.length - 2;
+                
+                allparts[key] = value.substr(0, newlen);
+                
+            }
+        }); 
+        
         return allparts;
         
     }
