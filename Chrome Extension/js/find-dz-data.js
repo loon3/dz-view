@@ -325,216 +325,43 @@ function getVarintArray(fullhex) {
 function findParts(data_chunk) {
     
     var parts = data_chunk.match(/.{1,2}/g);  
-    var allparts = new Object();
-    var k = "prefix";
     var tx_type_hex = "";
     
-    for(var i = 0; i < 8; i++){
-            
-        tx_type_hex += parts[i];
-        
+    for(var i = 0; i < 8; i++){            
+        tx_type_hex += parts[i];    
     }
     
-    console.log(tx_type_hex);
-    
     var tx_type = hex2bin(tx_type_hex);
-    
     console.log(tx_type);
             
     if(tx_type == "DZITCRTE") {
-                
-        for(var i = 0; i < parts.length; i++){
-
-            if(parts[i-1] == "01"){
-                if(parts[i] == "64"){
-                    k = "d";
-                }
-                if(parts[i] == "63"){
-                    k = "c";
-                }
-                if(parts[i] == "70"){
-                    k = "p";    
-                }
-                if(parts[i] == "65"){
-                    k = "e";    
-                }
-            }
-
-            //if(parts[i] != "01"){
-                if (allparts[k] !== undefined) {
-                    allparts[k] += parts[i];
-                }else{
-                    allparts[k] = parts[i];
-                }
-            //}
-
-        }
         
-        $.each(allparts, function(key, value) {
-            if (value.slice(-2) == "01") {
-                
-                var newlen = value.length - 2;
-                
-                allparts[key] = value.substr(0, newlen);
-                
-            }
-        }); 
-    
-        return allparts;
-        
+        var params = ["d", "c", "p", "e"];  
+        var allparts = getTxParam(parts, params);
+
     } else if(tx_type == "DZINCRTE") {
-                
-        for(var i = 0; i < parts.length; i++){
-
-            if(parts[i-1] == "01"){
-                if(parts[i] == "70"){
-                    k = "p";    
-                }
-                if(parts[i] == "65"){
-                    k = "e";    
-                }
-            }
-
-             //if(parts[i] != "01"){
-                if (allparts[k] !== undefined) {
-                    allparts[k] += parts[i];
-                }else{
-                    allparts[k] = parts[i];
-                }
-            //}
-
-        }
         
-        $.each(allparts, function(key, value) {
-            if (value.slice(-2) == "01") {
-                
-                var newlen = value.length - 2;
-                
-                allparts[key] = value.substr(0, newlen);
-                
-            }
-        }); 
-    
-        return allparts;
-        
+        var params = ["p", "e"];  
+        var allparts = getTxParam(parts, params);
+
     } else if(tx_type == "DZBYUPDT") {
-                  
-        for(var i = 0; i < parts.length; i++){
+         
+        var params = ["d", "a"];  
+        var allparts = getTxParam(parts, params);
 
-            if(parts[i-1] == "01"){
-                if(parts[i] == "64"){
-                    k = "d";    
-                }
-                if(parts[i] == "61"){
-                    k = "a";    
-                }
-            }
-
-             //if(parts[i] != "01"){
-                if (allparts[k] !== undefined) {
-                    allparts[k] += parts[i];
-                }else{
-                    allparts[k] = parts[i];
-                }
-            //}
-
-        }
-        
-        $.each(allparts, function(key, value) {
-            if (value.slice(-2) == "01") {
-                
-                var newlen = value.length - 2;
-                
-                allparts[key] = value.substr(0, newlen);
-                
-            }
-        }); 
-    
-        return allparts;
-        
     } else if(tx_type == "DZSLUPDT") {
-                  
-        for(var i = 0; i < parts.length; i++){
+         
+        var params = ["p", "d", "a"];  
+        var allparts = getTxParam(parts, params);
 
-            if(parts[i-1] == "01"){
-                if(parts[i] == "70"){
-                    k = "p";    
-                }
-                if(parts[i] == "64"){
-                    k = "d";    
-                }
-                if(parts[i] == "61"){
-                    k = "a";    
-                }
-            }
-
-             //if(parts[i] != "01"){
-                if (allparts[k] !== undefined) {
-                    allparts[k] += parts[i];
-                }else{
-                    allparts[k] = parts[i];
-                }
-            //}
-
-        }
-        
-        $.each(allparts, function(key, value) {
-            if (value.slice(-2) == "01") {
-                
-                var newlen = value.length - 2;
-                
-                allparts[key] = value.substr(0, newlen);
-                
-            }
-        }); 
-    
-        return allparts;
-        
     } else if(tx_type == "DZINPAID") {
-                  
-        for(var i = 0; i < parts.length; i++){
-
-            if(parts[i-1] == "01"){
-                if(parts[i] == "64"){
-                    k = "d";    
-                }
-                if(parts[i] == "74"){
-                    k = "t";    
-                }
-                if(parts[i] == "63"){
-                    k = "c";    
-                }
-                if(parts[i] == "71"){
-                    k = "q";    
-                }
-                if(parts[i] == "70"){
-                    k = "p";    
-                }
-            }
-
-              //if(parts[i] != "01"){
-                if (allparts[k] !== undefined) {
-                    allparts[k] += parts[i];
-                }else{
-                    allparts[k] = parts[i];
-                }
-            //}
-
-        }
-        
-        $.each(allparts, function(key, value) {
-            if (value.slice(-2) == "01") {
-                
-                var newlen = value.length - 2;
-                
-                allparts[key] = value.substr(0, newlen);
-                
-            }
-        }); 
-        
-        return allparts;
+         
+        var params = ["d", "t", "c", "q", "p"];  
+        var allparts = getTxParam(parts, params);        
         
     }
+    
+    if(allparts != undefined){ return allparts; }
     
 }
 
@@ -548,5 +375,47 @@ function getCoord(addr){
     
     return location;
 
+}
+
+function getTxParam(parts, parameter_array){
+     
+     var allparts = new Object();
+     var k = "prefix";
+    
+     for(var i = 0; i < parts.length; i++){
+
+         for(var j = 0; j < parameter_array.length; j++){
+
+             var parameter_hex = bin2hex(parameter_array[j]);
+
+             if(parts[i-1] == "01"){
+                    if(parts[i] == parameter_hex){
+                        k = parameter_array[j];    
+                    }
+             }
+
+         }
+
+        if (allparts[k] !== undefined) {
+            allparts[k] += parts[i];
+        }else{
+            allparts[k] = parts[i];
+        }
+            //}
+
+    }
+        
+    $.each(allparts, function(key, value) {
+        if (value.slice(-2) == "01") {
+
+            var newlen = value.length - 2;
+
+            allparts[key] = value.substr(0, newlen);
+
+        }
+    }); 
+
+    return allparts;
+         
 }
 
