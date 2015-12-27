@@ -127,21 +127,43 @@ if (document.location.hostname == "chain.so") {
                         
                 } else if(tx_type == "DZINPAID"){
                     
+                    var comm_dec = "n/a";
+                    var del_dec = "n/a";
+                    var prod_dec = "n/a";
+                    
                     var desc = allparts['d'];               
                     var desc_copy = hex2bin(desc.substr(4));
                     
                     var txid = allparts['t'];               
                     var txid_copy = hex2bin(txid.substr(4));
                     
-                    var comm_hex = allparts['c'].substr(2); 
-                    var comm_clean = getVarintArray(comm_hex);
-                    var comm_dec = parseInt(comm_clean, 16);
+                    if(allparts['c'] != undefined) {
+                        var comm_hex = allparts['c'].substr(2); 
+                        var comm_clean = getVarintArray(comm_hex);
+                        var comm_dec = parseInt(comm_clean, 16);
+                        console.log("Seller Communication Quality (0 to 8): "+comm_dec);
+                    }
+                    
+                    if(allparts['q'] != undefined) {
+                        var del_hex = allparts['q'].substr(2); 
+                        var del_clean = getVarintArray(del_hex);
+                        var del_dec = parseInt(del_clean, 16);
+                        console.log("Seller Delivery Quality (0 to 8): "+del_dec);
+                    }
+                    
+                    if(allparts['p'] != undefined) {
+                        var prod_hex = allparts['p'].substr(2); 
+                        var prod_clean = getVarintArray(prod_hex);
+                        var prod_dec = parseInt(prod_clean, 16);
+                        console.log("Seller Product Quality (0 to 8): "+prod_dec);
+                    }
+
                     
                     console.log("Review: "+desc_copy);
                     console.log("Transaction ID: "+txid_copy);
-                    console.log("Seller Communication Quality (0 to 8): "+comm_dec);
                     
-                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>Buyer Invoice Review <div style='font-size: 14px'>(DZINPAID)</div></div><div align='center' style='padding: 20px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Seller Communication Quality (0 to 8)</span><br><span style='font-size: 32px;'>"+comm_dec+"</span></div><div align='center' style='padding: 0px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Transaction ID</span><br><span style='font-size: 12px;'><a href='https://chain.so/tx/BTC/"+txid_copy+"'>"+txid_copy+"</a></span></div><div style='width: 400px; margin: auto; text-align: center;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Review</span><br><span style='font-size: 16px;'>"+desc_copy+"</span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
+                    
+                    $("<div style='margin: 10px auto 40px auto; width: 500px; padding: 0 10px 10px 10px; font-size: 22px; background-color: #f8f8f8;'><div align='center' style='width: 500px; padding: 5px; margin-left: -10px; color: #fff; background-color: #000; font-weight: bold;'>DROP ZONE</div>"+"<div align='center' style='padding-top: 20px'>Buyer Invoice Review <div style='font-size: 14px'>(DZINPAID)</div></div><div style='width: 400px; margin: auto; padding: 20px 0 10px 0; text-align: center;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Review</span><br><span style='font-size: 16px;'>"+desc_copy+"</span></div><div align='center' style='padding: 10px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Seller Communication Quality (0 to 8)</span><br><span style='font-size: 32px;'>"+comm_dec+"</span></div><div align='center' style='padding: 0 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Seller Delivery Quality (0 to 8)</span><br><span style='font-size: 32px;'>"+del_dec+"</span></div><div align='center' style='padding: 0 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Seller Product Quality (0 to 8)</span><br><span style='font-size: 32px;'>"+prod_dec+"</span></div><div align='center' style='padding: 10px 0 10px 0;'><span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Transaction ID</span><br><span style='font-size: 12px;'><a href='https://chain.so/tx/BTC/"+txid_copy+"'>"+txid_copy+"</a></span></div><div align='center' style='font-size: 11px; padding-top: 40px;'>data parsed by dz-view v"+manifest.version+"</div></div>").insertAfter( ".row:first" );
                         
                 }
                 
@@ -481,6 +503,12 @@ function findParts(data_chunk) {
                 }
                 if(parts[i] == "63"){
                     k = "c";    
+                }
+                if(parts[i] == "71"){
+                    k = "q";    
+                }
+                if(parts[i] == "70"){
+                    k = "p";    
                 }
             }
 
