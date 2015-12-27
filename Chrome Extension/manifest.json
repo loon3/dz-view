@@ -8,8 +8,15 @@
    "content_scripts": [
     {
       "matches": ["https://chain.so/*"],
-      "js": ["js/jquery.min.js", "js/find-dz-data.js"]
+      "js": ["js/jquery.min.js", "js/find-dz-data.js", "js/bitcoinjs-min.js"]
     }
+   ],
+   "web_accessible_resources": [
+        "js/jquery.min.js", 
+        "js/bitcoinjs-min.js", 
+        "js/find-dz-data.js",
+        "js/test.js",
+        "test.html"
    ],
    "manifest_version": 2,
    "name": "dz-view",
