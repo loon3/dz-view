@@ -10,9 +10,9 @@
 //                             
 //}
 
+console.log(chrome.extension.getURL('test.html'));
+
 if (document.location.hostname == "chain.so") {
-    
-    console.log(chrome.extension.getURL('test.html'));
     
     var manifest = chrome.runtime.getManifest();
 
@@ -62,6 +62,7 @@ if (document.location.hostname == "chain.so") {
                     }
 
                     if (hex2bin(currency.substr(4)) == "BTC") {price_dec = price_dec / 100000000;}
+                    if (hex2bin(currency.substr(4)) == "USD") {price_dec = (price_dec / 100).toFixed(2);}
 
                     if (isNaN(price_dec)) {price_dec = "n/a";} 
                     var price_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span>";
@@ -102,6 +103,7 @@ if (document.location.hostname == "chain.so") {
                     }
 
                     if (hex2bin(currency.substr(4)) == "BTC") {price_dec = price_dec / 100000000;}
+                    if (hex2bin(currency.substr(4)) == "USD") {price_dec = (price_dec / 100).toFixed(2);}
 
                     if (isNaN(price_dec)) {price_dec = "n/a";} 
                     var price_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Price</span><br><span style='font-size: 32px;'>"+price_dec+"</span>";
@@ -376,9 +378,7 @@ function findParts(data_chunk) {
     var parts = data_chunk.match(/.{1,2}/g);  
     var tx_type_hex = "";
     
-    for(var i = 0; i < 8; i++){            
-        tx_type_hex += parts[i];    
-    }
+    for(var i = 0; i < 8; i++){ tx_type_hex += parts[i]; }
     
     var tx_type = hex2bin(tx_type_hex);
     console.log(tx_type);
@@ -399,12 +399,14 @@ function findParts(data_chunk) {
         var allparts = getTxParam(parts, params);
 
     } else if(tx_type == "DZBYUPDT") {
-         
+        
+        //need t
         var params = ["d", "a"];  
         var allparts = getTxParam(parts, params);
 
     } else if(tx_type == "DZSLUPDT") {
-         
+        
+        //need t
         var params = ["p", "d", "a"];  
         var allparts = getTxParam(parts, params);
 
@@ -455,7 +457,6 @@ function getTxParam(parts, parameter_array){
         }else{
             allparts[k] = parts[i];
         }
-            //}
 
     }
         
