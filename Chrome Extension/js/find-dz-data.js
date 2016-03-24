@@ -80,8 +80,13 @@ if (document.location.hostname == "chain.so") {
                     var tx_type_copy = "Update Item Listing <div style='font-size: 14px'>(DZITUPDT)</div>";
                     tx_type_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Tx Type</span><br>"+tx_type_copy;
                     
-                    var listing_tx = allparts['t'];               
-                    var listing_tx_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Item Listing Tx</span><br><span style='font-size: 11px;'><a href='"+hex2bin(listing_tx.substr(4))+"'>"+hex2bin(listing_tx.substr(4))+"</a></span>";
+                    var listing_tx = allparts['t']; 
+                    
+                    if (listing_tx.substr(4).length == 64) {
+                        var listing_tx_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Item Listing Tx</span><br><span style='font-size: 11px;'><a href='"+listing_tx.substr(4)+"'>"+listing_tx.substr(4)+"</a></span>";
+                    } else {
+                        var listing_tx_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Item Listing Tx</span><br><span style='font-size: 11px;'><a href='"+hex2bin(listing_tx.substr(4))+"'>"+hex2bin(listing_tx.substr(4))+"</a></span>";
+                    }
                     
                     var description = allparts['d'];               
                     var description_copy = "<span style='font-weight: bold; font-size: 12px; color: #aaaaaa;'>Description</span><br>"+hex2bin(description.substr(4));
@@ -185,8 +190,15 @@ if (document.location.hostname == "chain.so") {
                     var desc = allparts['d'];               
                     var desc_copy = hex2bin(desc.substr(4));
                     
-                    var txid = allparts['t'];               
-                    var txid_copy = hex2bin(txid.substr(4));
+                    var txid = allparts['t'];  
+                    
+                    if (txid.substr(4).length == 64) {
+                        var txid_copy = txid.substr(4);
+                    } else {
+                        var txid_copy = hex2bin(txid.substr(4));
+                    }
+                    
+                    //var txid_copy = hex2bin(txid.substr(4));
                     
                     if(allparts['c'] != undefined) {
                         var comm_hex = allparts['c'].substr(2); 
@@ -390,6 +402,7 @@ function findParts(data_chunk) {
 
     } else if(tx_type == "DZITUPDT") {
         
+        //t = tx id
         var params = ["d", "c", "t", "p", "e"];  
         var allparts = getTxParam(parts, params);
 
@@ -400,18 +413,19 @@ function findParts(data_chunk) {
 
     } else if(tx_type == "DZBYUPDT") {
         
-        //need t
+        //need t = new address for transfer
         var params = ["d", "a"];  
         var allparts = getTxParam(parts, params);
 
     } else if(tx_type == "DZSLUPDT") {
         
-        //need t
+        //need t = new address for transfer
         var params = ["p", "d", "a"];  
         var allparts = getTxParam(parts, params);
 
     } else if(tx_type == "DZINPAID") {
          
+        //t = tx id
         var params = ["d", "t", "c", "q", "p"];  
         var allparts = getTxParam(parts, params);        
         
